@@ -20,7 +20,7 @@ router.afterEach(() => {
 </script>
 
 <template>
-   
+
     <main>
         <!-- Page Loader -->
         <v-overlay v-model="isLoading" class="loader-overlay" :scrim="false">

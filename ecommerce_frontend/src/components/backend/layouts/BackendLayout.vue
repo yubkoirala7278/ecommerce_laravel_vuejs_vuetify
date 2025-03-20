@@ -4,7 +4,7 @@ import Dashboard from './Dashboard.vue'
 <template>
     <v-app>
         <!-- Dashboard -->
-         <Dashboard/>
+        <Dashboard />
         <!-- Main Content Area -->
         <v-main>
             <main>
@@ -14,4 +14,3 @@ import Dashboard from './Dashboard.vue'
         </v-main>
     </v-app>
 </template>
-

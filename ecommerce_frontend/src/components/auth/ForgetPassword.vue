@@ -18,25 +18,28 @@ const handleForgetPassword = async () => {
 </script>
 
 <template>
-    <v-container class="py-5">
+    <v-container class="fill-height d-flex align-center justify-center">
         <v-row justify="center">
-            <v-col cols="12" md="6">
-                <v-alert v-if="authStore.authStatus" type="success" class="mb-4" text>
-                    {{ authStore.authStatus }}
-                </v-alert>
-                <v-card elevation="8" class="border-0">
-                    <v-card-title class="bg-primary white--text text-center">
-                        <h4 class="mx-auto">Forget Password</h4>
+            <v-col cols="12" sm="8" md="5">
+                <v-card elevation="10" class="pa-5 rounded-xl">
+                    <v-card-title class="text-center">
+                        <h3 class="font-weight-bold text-primary">Forgot Password</h3>
                     </v-card-title>
-                    <v-card-text class="pa-4">
-                        <v-form @submit.prevent="handleForgetPassword">
-                            <v-text-field v-model="email" label="Email address" type="email"
-                                placeholder="Enter your email" id="email" variant="outlined" class="mb-4"
-                                :error-messages="authStore.authErrors.email?.[0] || ''"></v-text-field>
 
-                            <v-btn type="submit" color="primary" block class="mb-3" :loading="authStore.loading"
-                                :disabled="authStore.loading">
-                                {{ authStore.loading ? "Loading..." : "Submit" }}
+                    <v-card-text>
+                        <v-alert v-if="authStore.authStatus" type="success" class="mb-4" text>
+                            {{ authStore.authStatus }}
+                        </v-alert>
+
+                        <v-form @submit.prevent="handleForgetPassword">
+                            <v-text-field v-model="email" label="Email Address" type="email"
+                                placeholder="Enter your email" id="email" variant="outlined" class="mb-3 rounded-lg"
+                                density="comfortable" :error-messages="authStore.authErrors.email?.[0] || ''">
+                            </v-text-field>
+
+                            <v-btn type="submit" color="primary" block class="rounded-lg text-capitalize py-3"
+                                :loading="authStore.loading" :disabled="authStore.loading">
+                                {{ authStore.loading ? "Processing..." : "Submit" }}
                             </v-btn>
                         </v-form>
                     </v-card-text>
@@ -47,13 +50,18 @@ const handleForgetPassword = async () => {
 </template>
 
 <style scoped>
-/* Optional: Add custom styles if needed */
-.bg-primary {
-    background-color: #1976d2 !important;
-    /* Vuetify primary color */
+.text-primary {
+    color: #1976d2 !important;
+    /* Vuetify Primary */
 }
 
-.white--text {
-    color: white !important;
+.rounded-xl {
+    border-radius: 16px;
+}
+
+/* Ensure full-height centering */
+.fill-height {
+    min-height: 100vh;
+    /* Full screen height */
 }
 </style>

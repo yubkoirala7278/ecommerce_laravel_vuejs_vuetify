@@ -19,11 +19,14 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['prefix' => 'categories'], function () {
-    Route::get('/', [CategoryController::class, 'index'])->name('categories.index');
-    Route::post('/', [CategoryController::class, 'store'])->name('categories.store');
-    Route::delete('/multiple', [CategoryController::class, 'deleteMultiple'])->name('categories.deleteMultiple'); // Moved up
-    Route::get('/{category}', [CategoryController::class, 'show'])->name('categories.show');
-    Route::put('/{category}', [CategoryController::class, 'update'])->name('categories.update');
-    Route::delete('/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+    // your routes
+    Route::group(['prefix' => 'categories'], function () {
+        Route::get('/', [CategoryController::class, 'index'])->name('categories.index');
+        Route::post('/', [CategoryController::class, 'store'])->name('categories.store');
+        Route::delete('/multiple', [CategoryController::class, 'deleteMultiple'])->name('categories.deleteMultiple'); // Moved up
+        Route::get('/{category}', [CategoryController::class, 'show'])->name('categories.show');
+        Route::put('/{category}', [CategoryController::class, 'update'])->name('categories.update');
+        Route::delete('/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+    });
 });

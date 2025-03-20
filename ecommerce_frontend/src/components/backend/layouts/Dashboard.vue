@@ -1,6 +1,10 @@
 <script setup>
 import { ref } from "vue";
 import { useRoute } from "vue-router";
+import { useAuthStore } from "../../../stores/auth"
+
+// Access the authentication store
+const authStore = useAuthStore();
 
 // Drawer state (open by default on larger screens)
 const drawer = ref(true);
@@ -21,7 +25,7 @@ const isActive = (itemRoute) => {
 
 // Methods
 const logout = () => {
-  console.log("Logged out");
+  authStore.handleLogout();
 };
 </script>
 <template>

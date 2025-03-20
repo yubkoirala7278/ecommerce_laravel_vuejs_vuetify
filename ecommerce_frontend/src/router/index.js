@@ -42,6 +42,18 @@ const routes = [
                 component: () => import("../components/auth/ResetPassword.vue"),
                 meta: { guestOnly: true },
             },
+            {
+                path: "/verify-email",
+                name: "VerifyEmail",
+                component: () => import("../components/auth/VerifyEmail.vue"),
+                meta: { requiresAuth: true, unverifiedOnly: true },
+            },
+            {
+                path: "/verification-success",
+                name: "VerificationSuccess",
+                component: () => import("../components/auth/VerificationSuccess.vue"),
+                meta: { requiresAuth: true },
+            },
         ],
     },
     {
@@ -53,13 +65,13 @@ const routes = [
                 path: "home",
                 name: "Dashboard",
                 component: () => import("../components/backend/Home.vue"),
-                meta: { requiresAuth: true },
+                meta: { requiresAuth: true, requiresVerified: true },
             },
             {
                 path: "category",
                 name: "Category",
                 component: () => import("../components/backend/category/Category.vue"),
-                meta: { requiresAuth: true },
+                meta: { requiresAuth: true, requiresVerified: true },
             },
         ],
     },
@@ -68,26 +80,32 @@ const router = createRouter({
     history: createWebHistory(),
     routes,
 });
-// Global Navigation Guard
+
 router.beforeEach(async (to, from, next) => {
-    const authStore = useAuthStore(); // Access the auth store
-    // Fetch the authenticated user if not already loaded
+    const authStore = useAuthStore();
+
     if (!authStore.authUser) {
-        await authStore.getUser(); // Fetch the user information from the backend
+        await authStore.getUser();
     }
-    // Handle protected routes
+
     if (to.meta.requiresAuth && !authStore.authUser) {
-        // Redirect to login if the user is not authenticated
         return next({ name: "Login" });
     }
-    // Handle guest-only routes (e.g., /login, /register)
-    if (to.meta.guestOnly && authStore.authUser) {
-        // Redirect authenticated users to the dashboard
+
+    if (to.meta.requiresVerified && authStore.authUser && !authStore.emailVerified) {
+        return next({ name: "VerifyEmail" });
+    }
+
+    if (to.meta.unverifiedOnly && authStore.authUser && authStore.emailVerified) {
         return next({ name: "Dashboard" });
     }
-    // Reset the fields on every route change
+
+    if (to.meta.guestOnly && authStore.authUser) {
+        return next({ name: "Dashboard" });
+    }
+
     authStore.resetFields();
-    // Allow navigation
     next();
 });
+
 export default router;
